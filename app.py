@@ -60,18 +60,10 @@ if input_file:
     img = Image.open(input_file).convert('RGB')
     st.image(img, caption="Scanning Leaf...", use_column_width=True)
     
-    # --- FIXED PREPROCESSING ---
-    # 1. Resize (Try 256, if it fails again, change this one number to 224)
-    # Change 256 or 224 to 128
-img_resized = img.resize((128, 128))
-    
-    # 2. Convert to Array and Normalize
+    # Check these lines below - they must be lined up!
+    img_resized = img.resize((128, 128)) 
     img_array = np.array(img_resized)
-    
-    # 3. Ensure it's Float32 and 0-1 range
     img_array = img_array.astype('float32') / 255.0
-    
-    # 4. The "Magic" Step: Add the batch dimension (None, 256, 256, 3)
     img_array = np.expand_dims(img_array, axis=0)
     
     # --- PREDICT ---
@@ -90,5 +82,6 @@ img_resized = img.resize((128, 128))
     # Simple Cure Logic
 
     st.info("💡 **Recommended Action:** Use organic fungicides, ensure proper sunlight, and remove infected leaves to prevent spreading.")
+
 
 
