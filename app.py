@@ -61,7 +61,7 @@ if input_file:
     st.image(img, caption="Scanning Leaf...", use_column_width=True)
     
     # Preprocessing
-    img_resized = img.resize((224, 224)) # Adjust to 256, 256 if needed
+    img_resized = img.resize((256, 256)) # Adjust to 256, 256 if needed
     img_array = np.array(img_resized) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     
@@ -75,4 +75,5 @@ if input_file:
     st.write(f"**Confidence:** {confidence:.2f}%")
     
     # Simple Cure Logic
+
     st.info("💡 **Recommended Action:** Use organic fungicides, ensure proper sunlight, and remove infected leaves to prevent spreading.")
