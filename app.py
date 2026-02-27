@@ -60,20 +60,33 @@ if input_file:
     img = Image.open(input_file).convert('RGB')
     st.image(img, caption="Scanning Leaf...", use_column_width=True)
     
-    # Preprocessing
-    img_resized = img.resize((256, 256)) # Adjust to 256, 256 if needed
-    img_array = np.array(img_resized) / 255.0
+    # --- FIXED PREPROCESSING ---
+    # 1. Resize (Try 256, if it fails again, change this one number to 224)
+    img_resized = img.resize((256, 256)) 
+    
+    # 2. Convert to Array and Normalize
+    img_array = np.array(img_resized)
+    
+    # 3. Ensure it's Float32 and 0-1 range
+    img_array = img_array.astype('float32') / 255.0
+    
+    # 4. The "Magic" Step: Add the batch dimension (None, 256, 256, 3)
     img_array = np.expand_dims(img_array, axis=0)
     
-    # Predict
-    predictions = model.predict(img_array)
-    result_index = np.argmax(predictions)
-    disease_name = CLASS_NAMES[result_index]
-    confidence = np.max(predictions) * 100
-    
-    st.success(f"### Prediction: {disease_name.replace('___', ' ').replace('_', ' ')}")
-    st.write(f"**Confidence:** {confidence:.2f}%")
+    # --- PREDICT ---
+    try:
+        predictions = model.predict(img_array)
+        result_index = np.argmax(predictions)
+        disease_name = CLASS_NAMES[result_index]
+        confidence = np.max(predictions) * 100
+        
+        st.success(f"### Prediction: {disease_name.replace('___', ' ').replace('_', ' ')}")
+        st.write(f"**Confidence:** {confidence:.2f}%")
+    except Exception as e:
+        st.error(f"Prediction Error: {e}")
+        st.info("Try changing the image size from 256 to 224 in the code.")
     
     # Simple Cure Logic
 
     st.info("💡 **Recommended Action:** Use organic fungicides, ensure proper sunlight, and remove infected leaves to prevent spreading.")
+
