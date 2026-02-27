@@ -62,7 +62,8 @@ if input_file:
     
     # --- FIXED PREPROCESSING ---
     # 1. Resize (Try 256, if it fails again, change this one number to 224)
-    img_resized = img.resize((256, 256)) 
+    # Change 256 or 224 to 128
+img_resized = img.resize((128, 128))
     
     # 2. Convert to Array and Normalize
     img_array = np.array(img_resized)
@@ -89,4 +90,5 @@ if input_file:
     # Simple Cure Logic
 
     st.info("💡 **Recommended Action:** Use organic fungicides, ensure proper sunlight, and remove infected leaves to prevent spreading.")
+
 
